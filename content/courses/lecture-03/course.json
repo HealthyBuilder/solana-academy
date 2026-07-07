@@ -1,0 +1,1 @@
+{ "title": "第三讲 · Solana 程序开发入门：链上数据存储程序", "description": "搭建本地环境、理解 RPC，并写出第一个简单的链上数据存储程序。", "category": "tech", "subcategory": "blockchain-basics", "difficulty": "intermediate", "tags": ["程序开发", "RPC", "本地节点"], "estimatedHours": 2 }

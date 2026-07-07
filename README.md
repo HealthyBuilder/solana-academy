@@ -1,36 +1,70 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Solana Academy
 
-## Getting Started
+系统化学习 Solana 的教学平台：课程目录、图文 + 视频课节、代码高亮、学习进度，界面支持中 / 英双语。
 
-First, run the development server:
+## 技术栈
+
+- **Next.js 16**（App Router）· **React 19** · **TypeScript**
+- **Tailwind CSS 4**
+- **MDX**（`next-mdx-remote/rsc`）渲染课程内容，`remark-gfm` 支持表格
+- **Shiki**（`rehype-pretty-code`）代码语法高亮
+- **Geist** 字体（`geist` 本地包，无需联网拉取）
+- 视频：YouTube（静音自动播放）+ Bilibili
+
+## 本地开发
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+pnpm install
+pnpm dev      # 开发服务器 http://localhost:3000
+pnpm build    # 生产构建
+pnpm start    # 运行生产构建
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## 目录结构
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+```
+content/courses/<课程 slug>/     课程内容（Markdown/MDX）
+  course.json                    课程元数据
+  NN-*.mdx                       各课节（frontmatter + 正文）
+src/
+  app/                           路由：首页 / 分类 / 课程 / 课节
+  components/                    ui · layout · course · lesson · mdx · i18n
+  config/                        taxonomy(分类) · strings(界面文案) · site
+  lib/                           content(内容层) · locale(语言) · utils
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## 内容模型
 
-## Learn More
+**课程** `content/courses/<slug>/course.json`：
 
-To learn more about Next.js, take a look at the following resources:
+```json
+{
+  "title": "第一讲 · 区块链基础",
+  "description": "...",
+  "category": "tech",
+  "subcategory": "blockchain-basics",
+  "difficulty": "beginner",
+  "tags": ["区块链基础", "共识"],
+  "estimatedHours": 3
+}
+```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+**课节** `content/courses/<slug>/NN-*.mdx`：frontmatter 支持
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+- `title` · `duration`（分钟）· `description`
+- `videoId`（YouTube）或 `bilibiliId`（B 站 `BV...`）——填了就在课节顶部嵌入视频
+- 正文为 Markdown/MDX，代码块自动语法高亮（可区分 Rust / TypeScript 等）
 
-## Deploy on Vercel
+新增课程：在 `content/courses/` 下建目录，放 `course.json` 与若干 `NN-*.mdx`，平台会自动收录并按文件名 `NN-` 前缀排序。
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+## 分类与导航
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+分类体系集中在 `src/config/taxonomy.ts`（单一数据源，标题双语）。`enabled: false` 的板块在导航中置灰、首页不展示。
+
+## 国际化
+
+界面支持中文 / English，通过页头的语言切换按钮（基于 cookie，服务端与客户端一致）。界面文案集中在 `src/config/strings.ts`，分类名在 `taxonomy.ts`。课程正文目前为中文。
+
+## 学习进度
+
+前端使用 `localStorage` 记录已完成课节（无需登录），刷新后保留。

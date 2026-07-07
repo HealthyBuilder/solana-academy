@@ -1,0 +1,9 @@
+{
+  "title": "第一讲 · 区块链基础",
+  "description": "从第一性原理理解区块链：分布式系统的难题、CAP 定理与拜占庭将军问题、共识机制（PoW / PoS）、区块链三难问题、密码学基石，以及区块链的演变与 Solana 的核心概念。",
+  "category": "tech",
+  "subcategory": "blockchain-basics",
+  "difficulty": "beginner",
+  "tags": ["区块链基础", "共识", "Solana 入门"],
+  "estimatedHours": 3
+}

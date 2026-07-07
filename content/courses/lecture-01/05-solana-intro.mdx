@@ -1,0 +1,198 @@
+---
+title: Solana 介绍
+description: Solana 开发的核心概念：账户、指令、交易、费用、程序、PDA 与跨程序调用。
+duration: 25
+---
+
+要在 Solana 上进行开发，了解 Solana 开发中独特的几个关键概念至关重要。本节涵盖了您在开始 Solana 开发时需要理解的核心概念，包括账户、交易、程序等内容。
+
+## 账户
+
+Solana 网络上的所有数据都存储在账户中。您可以将 Solana 网络视为一个包含单一账户表的公共数据库。账户与其地址之间的关系类似于键值对，其中键是地址，值是账户。每个账户都有相同的基本结构，并且可以通过其地址找到。
+
+### 账户地址
+
+账户地址是一个 32 字节的唯一 ID，用于在 Solana 区块链上定位账户。账户地址通常以 base58 编码字符串的形式显示。大多数账户使用 Ed25519 公钥作为其地址，但这并不是强制性的，因为 Solana 还支持程序派生地址。
+
+### 账户结构
+
+每个 Account 的最大大小为 10MiB，并包含以下信息：
+
+- `lamports`：账户中的 lamports 数量
+- `data`：账户的数据
+- `owner`：拥有该账户的程序的 ID
+- `executable`：指示账户是否包含可执行二进制文件
+- `rent_epoch`：已弃用的租金 epoch 字段
+
+### 账户类型
+
+账户分为两大类：
+
+- **程序账户**：包含可执行代码的账户
+- **数据账户**：不包含可执行代码的账户
+
+程序代码与其状态的分离是 Solana 账户模型的一个关键特性（类似于操作系统，通常将程序和其数据分为不同的文件）。
+
+每个程序都由一个加载器程序拥有。当部署一个新的程序时，会创建一个账户来存储其可执行代码，这被称为**程序账户**。使用 loader-v3 部署的程序，其 `data` 字段中不包含程序代码，而是指向一个单独的**程序数据账户**。
+
+**数据账户**不包含可执行代码，而是用于存储信息。程序使用数据账户来维护其状态。为了管理其状态，一个新程序必须：
+
+- 调用 System Program 来创建一个账户（然后 System Program 将所有权转移给新程序）
+- 根据其指令初始化账户数据
+
+由 System Program 拥有的账户称为**系统账户**。所有钱包账户都是系统账户，这使它们能够支付交易费用。
+
+## 指令
+
+指令是与 Solana 区块链交互的基本构建块。指令本质上是一个公共函数，任何使用 Solana 网络的人都可以调用。每个指令用于执行特定的操作，其执行逻辑存储在程序中。要与 Solana 网络交互，需要将一个或多个指令添加到交易中并发送到网络进行处理。
+
+一个 Instruction 包含以下信息：
+
+```rust
+pub struct Instruction {
+    /// 执行该指令的程序的 Pubkey。
+    pub program_id: Pubkey,
+    /// 描述应传递给程序的账户的元数据。
+    pub accounts: Vec<AccountMeta>,
+    /// 传递给程序由其自行解释的不透明数据。
+    pub data: Vec<u8>,
+}
+```
+
+- **程序 ID**：包含指令业务逻辑的程序的公钥地址。
+- **账户元数据**：`accounts` 数组是一个 `AccountMeta` 结构体的数组。每个指令交互的账户都必须提供元数据（这允许交易并行执行指令，只要它们不修改同一个账户）。
+- **数据**：一个字节数组，用于指定调用程序的哪条指令，并包括指令所需的任何参数。
+
+```rust
+pub struct AccountMeta {
+    /// 账户的公钥。
+    pub pubkey: Pubkey,
+    /// 如果指令要求与 pubkey 匹配的交易签名，则为 true。
+    pub is_signer: bool,
+    /// 如果账户数据或元数据在程序执行期间可能被修改，则为 true。
+    pub is_writable: bool,
+}
+```
+
+## 交易
+
+要与 Solana 网络交互，您必须发送一笔交易。您可以将交易视为一个装有多种表单的信封，每个表单都是一条指令。交易是**原子性的**：如果单条指令失败，整个交易将失败，并且不会发生任何更改。交易的总大小限制为 1232 字节。
+
+一个 Transaction 包含签名数组与消息：
+
+```rust
+pub struct Transaction {
+    pub signatures: Vec<Signature>,
+    pub message: Message,
+}
+```
+
+### 签名
+
+`signatures` 数组中每个 Signature 为 64 字节，通过使用账户的私钥对交易的 Message 进行签名创建。每个签名账户的指令都必须提供一个签名。第一个签名属于支付交易基础费用的账户，并且是交易签名，可用于在网络上查找交易的详细信息。
+
+### 消息
+
+交易的 `message` 包含头部、账户地址、最近的区块哈希与指令：
+
+```rust
+pub struct Message {
+    /// 消息头部，标识签名的与只读的 account_keys。
+    pub header: MessageHeader,
+    /// 本交易使用的所有账户公钥。
+    pub account_keys: Vec<Pubkey>,
+    /// 最近一条账本记录的 id，作为交易时间戳。
+    pub recent_blockhash: Hash,
+    /// 若全部成功则按顺序执行并在一笔原子交易中提交的程序指令。
+    pub instructions: Vec<CompiledInstruction>,
+}
+```
+
+消息的 `header` 是一个 `MessageHeader`，用于（结合 `account_keys`）确定每个账户的权限：
+
+```rust
+pub struct MessageHeader {
+    /// 本消息被视为有效所需的签名数量。
+    pub num_required_signatures: u8,
+    /// 已签名公钥中末尾若干个为只读账户。
+    pub num_readonly_signed_accounts: u8,
+    /// 未签名公钥中末尾若干个为只读账户。
+    pub num_readonly_unsigned_accounts: u8,
+}
+```
+
+`account_keys` 以紧凑数组格式发送，且必须严格按以下顺序排列：
+
+- 签名者 + 可写
+- 签名者 + 只读
+- 非签名者 + 可写
+- 非签名者 + 只读
+
+`recent_blockhash` 作为交易的时间戳并防止重复交易。区块哈希在 150 个区块后过期（约一分钟，假设每个区块 400 毫秒）。
+
+`instructions` 数组中的每一项是一个 `CompiledInstruction`：
+
+```rust
+pub struct CompiledInstruction {
+    /// 指向交易 keys 数组的索引，表示执行该指令的程序账户。
+    pub program_id_index: u8,
+    /// 指向交易 keys 数组的有序索引，表示要传给程序的账户。
+    pub accounts: Vec<u8>,
+    /// 程序输入数据。
+    pub data: Vec<u8>,
+}
+```
+
+## 交易费用
+
+每笔 Solana 交易都需要支付交易费用，以 SOL 结算。交易费用分为两部分：基础费用和优先费用。
+
+### 基础费用
+
+每笔交易的每个包含的签名费用为 5000 lamports，由交易的第一个签名者支付。只有由 System Program 拥有的账户才能支付交易费用。基础费用的一半被销毁（从流通供应中移除），另一半支付给处理交易的验证者。
+
+### 优先费用
+
+优先费用是一种可选费用，用于增加当前领导者处理您交易的可能性，验证者会收到 100% 的优先费用。可以通过调整交易的计算单元（CU）价格和 CU 限制来设置：
+
+```text
+Prioritization fee = CU limit * CU price
+Priority = (Prioritization fee + Base fee) / (1 + CU limit + Signature CUs + Write lock CUs)
+```
+
+默认情况下，每条指令分配 200,000 个 CU，每笔交易分配 140 万个 CU。可以通过 `SetComputeUnitLimit` 指令更改。建议先通过模拟交易估算所需 CU，再增加 10% 的安全余量。CU 价格则通过 `SetComputeUnitPrice` 指令设置，默认值为 0。
+
+## 程序
+
+在 Solana 中，智能合约被称为程序。程序是一个无状态的账户，其中包含可执行代码，这些代码被组织成称为指令的函数。当程序被部署时，Solana 使用 LLVM 将其编译为可执行和链接格式（ELF），其中包含以 Solana 字节码格式（sBPF）编写的程序二进制文件，并存储在链上的可执行账户中。
+
+大多数程序使用 Rust 编写，常见的开发方法有两种：
+
+- **Anchor**：一个为快速和简单的 Solana 开发设计的框架，使用 Rust 宏减少样板代码，非常适合初学者。
+- **原生 Rust**：直接使用 Rust 编写程序，不依赖任何框架，提供更多灵活性但也增加复杂性。
+
+要修改现有程序，必须将一个账户指定为升级权限。如果升级权限被撤销并设置为 `None`，则该程序将无法再被更新。Solana 还支持可验证构建，允许用户检查程序的链上代码是否与其公开的源代码匹配。
+
+## 程序派生地址（PDA）
+
+公钥地址的一个有用替代方案是程序派生地址（PDA）。PDA 是使用程序 ID 和一组可选的预定义输入确定性创建的地址。PDA 看起来与公钥地址类似，但没有对应的私钥。Solana 运行时允许程序为 PDA 签名而无需私钥。
+
+PDA 被有意派生为落在 Ed25519 曲线之外，这意味着它没有有效的对应私钥。您可以将 PDA 理解为一种在链上使用预定义输入集（字符串、数字、其他账户地址等）创建类似哈希映射结构的方式。
+
+派生 PDA 并不会自动在该地址创建链上账户——账户必须通过用于派生 PDA 的程序显式创建。各 SDK 提供的派生函数如下：
+
+| SDK | 函数 |
+| --- | --- |
+| @solana/kit (TypeScript) | `getProgramDerivedAddress` |
+| @solana/web3.js (TypeScript) | `findProgramAddressSync` |
+| solana_sdk (Rust) | `find_program_address` |
+
+该函数使用程序 ID 和可选种子，通过从 255 开始递减迭代 bump 值，直到找到一个有效的 PDA，并返回 PDA 和 bump seed。bump seed 是附加到可选种子上的一个额外字节，用于确保生成一个有效的非曲线地址。
+
+## 跨程序调用（CPI）
+
+当一个 Solana 程序直接调用另一个程序的指令时，就会发生跨程序调用（CPI）。这使得程序具有可组合性。如果将 Solana 的指令视为程序向网络公开的 API 端点，那么 CPI 就像一个端点在内部调用另一个端点。
+
+在进行 CPI 时，账户权限从一个程序扩展到另一个程序。假设程序 A 接收到一个包含签名账户和可写账户的指令，程序 A 然后对程序 B 进行 CPI，此时程序 B 可以使用与程序 A 相同的账户并保留其原始权限。在进行 CPI 时，程序还可以代表从其程序 ID 派生的 PDA 进行签名。
+
+程序指令调用的最大堆栈高度为 5（常量 `MAX_INSTRUCTION_STACK_DEPTH`）。堆栈高度从初始交易的 1 开始，每当一个程序调用另一个指令时增加 1，从而将 CPI 的调用深度限制为 4。

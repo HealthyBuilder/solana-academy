@@ -1,26 +1,124 @@
 @import "tailwindcss";
 
+/*
+ * Solana Academy 设计 token
+ * 风格参考 solana-attestation-site：浅色、极简、黑白底 + 青色 hover + 粉→青渐变，
+ * 边框优先而非阴影。Solana 品牌紫/绿作为强调色。
+ */
 :root {
   --background: #ffffff;
-  --foreground: #171717;
+  --foreground: #0a0a0a;
+  --card: #ffffff;
+  --muted: #f6f6f6;
+  --muted-foreground: #6b7280;
+  --border: #e7e7e7;
+  --input: #e7e7e7;
+  --ring: #0a0a0a;
+  --primary: #0a0a0a;
+  --primary-foreground: #ffffff;
+  --accent: #e6ffff; /* 青色 hover */
+  --accent-foreground: #0a0a0a;
+
+  /* Solana 品牌色 */
+  --solana-purple: #9945ff;
+  --solana-green: #14f195;
+
+  /* 粉 → 青 渐变（参考站强调） */
+  --gradient-from: #ffd4ff;
+  --gradient-to: #aaffff;
+
+  --radius: 0.625rem;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+  --color-card: var(--card);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-solana-purple: var(--solana-purple);
+  --color-solana-green: var(--solana-green);
+
+  /* 标题/UI 用等宽 Geist Mono；正文用 Geist Sans。均带 CJK 系统字体回退。 */
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI",
+    "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo,
+    "PingFang SC", "Microsoft YaHei", monospace;
+
+  --radius-lg: var(--radius);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-sm: calc(var(--radius) - 4px);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@layer base {
+  * {
+    border-color: var(--border);
+  }
+  body {
+    background: var(--background);
+    color: var(--foreground);
+    font-family: var(--font-sans);
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+  /* 标题统一等宽字体 + 收紧字距，呼应 Solana 开发者风格 */
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    font-family: var(--font-mono);
+    letter-spacing: -0.02em;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+/* 粉 → 青 强调渐变 */
+.gradient-accent {
+  background-image: linear-gradient(135deg, var(--gradient-from), var(--gradient-to));
 }
+
+/* Solana 品牌渐变（紫 → 绿） */
+.gradient-solana {
+  background-image: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+}
+
+/* 文字应用 Solana 品牌渐变 */
+.text-gradient-solana {
+  background-image: linear-gradient(135deg, var(--solana-purple), var(--solana-green));
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 代码块语言标签（rehype-pretty-code 注入的 data-language） */
+pre[data-language]::before {
+  content: attr(data-language);
+  position: absolute;
+  top: 0.5rem;
+  right: 0.75rem;
+  font-size: 0.7rem;
+  line-height: 1;
+  font-family: var(--font-mono);
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--muted-foreground);
+  pointer-events: none;
+}
+pre[data-language="text"]::before,
+pre[data-language="plaintext"]::before,
+pre[data-language="plain"]::before {
+  content: none;
+}
+/* Shiki 行内的换行结构 */
+pre code {
+  display: grid;
+}
+

@@ -1,0 +1,24 @@
+---
+title: 程序安全
+description: 系统梳理 Solana 程序最常见的安全漏洞与防御手法。
+duration: 90
+---
+
+写得出程序，还要写得安全。这一节系统梳理 Solana 程序中最常见的安全漏洞，以及每一种的成因与防御手法 —— 这些几乎是每个上线程序都必须自查的清单。
+
+## 你将学到
+
+- **安全概览**：攻击面与基本心法
+- **签名者检查（Signer Checks）**：确认关键操作有正确的签名授权
+- **所有者检查（Owner Checks）**：校验账户的 owner 程序，防止伪造账户
+- **数据匹配（Data Matching）**：校验账户数据与预期一致
+- **类型伪装（Type Cosplay）**：防止不同类型账户被混用
+- **重复可变账户（Duplicate Mutable Accounts）**：防范同一账户被重复传入
+- **重新初始化攻击（Reinitialization）**：防止已初始化账户被再次初始化
+- **复活攻击（Revival）**：防止已关闭账户被复用
+- **任意 CPI（Arbitrary CPI）**：校验被调用的目标程序
+- **PDA 共享（PDA Sharing）**：避免 PDA 权限过度共享
+
+## 动手练习
+
+👉 [配套交互式练习（含动手挑战）](https://learn.blueshift.gg/zh-CN/courses/program-security/introduction)
