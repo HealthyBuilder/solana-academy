@@ -4,6 +4,7 @@ import type { Category } from "@/config/taxonomy";
 import { getCoursesBySubcategory } from "@/lib/content";
 import { dictionaries, type Locale } from "@/config/strings";
 import { CourseGrid } from "./course-grid";
+import { OngoingBadge } from "./ongoing-badge";
 
 /**
  * 渲染一个顶级分类：标题 + 简介 + 各子分类区块（带锚点）+ 课程网格。首页与分类页共用。
@@ -41,6 +42,7 @@ export function CategoryBlock({
                 <h3 className="flex items-baseline gap-2.5 text-xl">
                   {sub.title[locale]}
                   <span className="font-mono text-xs font-normal tracking-normal text-muted-foreground">{courses.length}</span>
+                  {sub.ongoing && <OngoingBadge label={t.common.ongoing} />}
                 </h3>
                 {hasMore && (
                   <Link

@@ -9,6 +9,8 @@ type VideoPlayerProps = {
   youtubeId?: string;
   /** Bilibili BV 号 */
   bilibiliId?: string;
+  /** Google Drive 文件 ID */
+  driveId?: string;
   /** 外链视频：渲染「前往观看」跳转卡片（无法内嵌时用） */
   externalUrl?: string;
   externalLabel?: string;
@@ -20,7 +22,7 @@ type VideoPlayerProps = {
  * YouTube：进入即静音自动播放（浏览器策略），叠加「取消静音」。
  * Bilibili：长视频默认不自动播放，由用户点击播放。
  */
-export function VideoPlayer({ youtubeId, bilibiliId, externalUrl, externalLabel, title }: VideoPlayerProps) {
+export function VideoPlayer({ youtubeId, bilibiliId, driveId, externalUrl, externalLabel, title }: VideoPlayerProps) {
   const [muted, setMuted] = useState(true);
   const { dict: t } = useLocale();
 
@@ -35,6 +37,20 @@ export function VideoPlayer({ youtubeId, bilibiliId, externalUrl, externalLabel,
           allow="fullscreen"
           allowFullScreen
           scrolling="no"
+        />
+      </div>
+    );
+  }
+
+  if (driveId) {
+    return (
+      <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border bg-black">
+        <iframe
+          className="absolute inset-0 size-full"
+          src={`https://drive.google.com/file/d/${driveId}/preview`}
+          title={title ?? "video"}
+          allow="autoplay; fullscreen"
+          allowFullScreen
         />
       </div>
     );

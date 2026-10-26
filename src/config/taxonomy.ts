@@ -12,6 +12,8 @@ export type SubCategory = {
   title: LocalizedText;
   /** false 时：导航与分类页都不展示该子分类 */
   enabled?: boolean;
+  /** true 时：标注「进行中」（内容还在持续更新） */
+  ongoing?: boolean;
 };
 
 export type Category = {
@@ -34,7 +36,7 @@ export const taxonomy: Category[] = [
     subcategories: [
       { slug: "blockchain-basics", title: { zh: "区块链技术基础", en: "Blockchain Fundamentals" } },
       { slug: "solana-app-dev", title: { zh: "Solana 应用开发", en: "Solana App Development" } },
-      { slug: "solana-enterprise", title: { zh: "Solana 企业实践", en: "Solana for Enterprise" }, enabled: false },
+      { slug: "solana-enterprise", title: { zh: "Solana 企业实践", en: "Solana for Enterprise" }, ongoing: true },
       { slug: "ecosystem-share", title: { zh: "Solana 生态分享", en: "Workshops from Ecosystem" } },
     ],
   },

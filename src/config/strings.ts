@@ -49,6 +49,7 @@ const zh = {
   },
   common: {
     comingSoon: "即将上线",
+    ongoing: "进行中",
     minutes: (n: number) => `约 ${n} 分钟`,
     lessonsCount: (n: number) => `${n} 节`,
     home: "首页",
@@ -99,6 +100,7 @@ const en: typeof zh = {
   },
   common: {
     comingSoon: "Coming soon",
+    ongoing: "In progress",
     minutes: (n: number) => `~${n} min`,
     lessonsCount: (n: number) => `${n} lessons`,
     home: "Home",

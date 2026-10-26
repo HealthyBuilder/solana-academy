@@ -66,9 +66,12 @@ export function Header() {
                       <Link
                         key={sub.slug}
                         href={`/category/${cat.slug}#${sub.slug}`}
-                        className="block rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-heading"
+                        className="flex items-center justify-between gap-2 rounded-md px-3 py-2 text-sm text-foreground transition-colors hover:bg-accent hover:text-heading"
                       >
                         {sub.title[locale]}
+                        {sub.ongoing && (
+                          <span className="font-mono text-[10px] text-brand">{t.common.ongoing}</span>
+                        )}
                       </Link>
                     ))}
                   </div>
