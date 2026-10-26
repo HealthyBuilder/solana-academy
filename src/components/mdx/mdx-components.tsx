@@ -47,6 +47,16 @@ export const mdxComponents: MDXComponents = {
     />
   ),
   hr: () => <hr className="my-8 border-border" />,
+  // 图片：限高 + 白色衬底（透明底的示意图在暗色主题下也看得清）；同一行的多张图会并排
+  img: ({ alt, ...props }) => (
+    // eslint-disable-next-line @next/next/no-img-element
+    <img
+      alt={alt ?? ""}
+      loading="lazy"
+      className="my-4 mr-3 inline-block max-h-[480px] w-auto max-w-full rounded-lg border border-border bg-white align-top"
+      {...props}
+    />
+  ),
   table: (props) => (
     <div className="my-6 overflow-x-auto">
       <table className="w-full border-collapse text-sm" {...props} />
