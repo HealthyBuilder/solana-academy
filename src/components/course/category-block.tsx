@@ -6,7 +6,7 @@ import { dictionaries, type Locale } from "@/config/strings";
 import { CourseGrid } from "./course-grid";
 
 /**
- * 渲染一个顶级分类：eyebrow + 大标题 + 各子分类区块（带锚点）+ 课程网格。首页与分类页共用。
+ * 渲染一个顶级分类：标题 + 简介 + 各子分类区块（带锚点）+ 课程网格。首页与分类页共用。
  * limitPerSub 时每个子分类最多展示该数量，超出显示「开始学习」链接到完整分类页。
  */
 export function CategoryBlock({
@@ -21,12 +21,10 @@ export function CategoryBlock({
   const t = dictionaries[locale];
   return (
     <section id={category.slug} className="scroll-mt-24">
-      <div className="mb-12 flex flex-col gap-5">
-        <span className="eyebrow">{category.title[locale]}</span>
+      <div className="mb-8 flex flex-col gap-2">
+        <h2 className="text-3xl sm:text-4xl">{category.title[locale]}</h2>
         {category.description && (
-          <h2 className="max-w-3xl text-4xl leading-[1.02] tracking-[-0.045em] sm:text-6xl">
-            {category.description[locale]}
-          </h2>
+          <p className="max-w-2xl text-base text-muted-foreground">{category.description[locale]}</p>
         )}
       </div>
 
@@ -38,16 +36,16 @@ export function CategoryBlock({
           const shown = limitPerSub ? courses.slice(0, limitPerSub) : courses;
           const hasMore = limitPerSub != null && courses.length > limitPerSub;
           return (
-            <div key={sub.slug} id={sub.slug} className="scroll-mt-24 border-t border-border py-10">
+            <div key={sub.slug} id={sub.slug} className="scroll-mt-24 border-t border-border py-8">
               <div className="mb-6 flex items-baseline justify-between gap-3">
-                <h3 className="flex items-baseline gap-3 text-2xl tracking-[-0.03em] sm:text-[28px]">
+                <h3 className="flex items-baseline gap-2.5 text-xl">
                   {sub.title[locale]}
-                  <span className="font-mono text-xs tracking-normal text-white/40">{courses.length}</span>
+                  <span className="font-mono text-xs font-normal tracking-normal text-muted-foreground">{courses.length}</span>
                 </h3>
                 {hasMore && (
                   <Link
                     href={`/category/${category.slug}#${sub.slug}`}
-                    className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-white transition-colors hover:text-solana-green"
+                    className="inline-flex shrink-0 items-center gap-1.5 text-sm font-semibold text-brand hover:underline underline-offset-4"
                   >
                     {t.course.startLearning}
                     <ArrowRight className="size-4" />

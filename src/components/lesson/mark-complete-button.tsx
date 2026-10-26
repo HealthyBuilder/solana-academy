@@ -21,7 +21,7 @@ export function MarkCompleteButton({
     <Button
       variant={done ? "secondary" : "default"}
       onClick={() => toggle(courseSlug, lessonSlug)}
-      className={cn(done && "border-solana-green text-solana-green")}
+      className={cn(done && "border-brand text-brand")}
     >
       <Check className="size-4" />
       {done ? t.lesson.completed : t.lesson.markComplete}

@@ -52,7 +52,7 @@ export default async function LessonPage({ params }: Params) {
           <div className="rounded-lg border border-border p-3">
             <Link
               href={`/course/${course.slug}`}
-              className="mb-2 block px-3 text-sm font-medium text-white hover:text-solana-green"
+              className="mb-2 block px-3 text-sm font-semibold text-heading hover:text-brand"
             >
               {courseTitle(course, locale)}
             </Link>

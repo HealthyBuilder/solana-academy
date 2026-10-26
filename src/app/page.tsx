@@ -15,14 +15,12 @@ export default async function HomePage() {
   return (
     <>
       {/* Hero */}
-      <section className="hero-glow border-b border-border">
+      <section className="hero-bg border-b border-border">
         <Container size="wide" className="py-20 sm:py-28">
-          <div className="flex flex-col items-start gap-7">
+          <div className="flex flex-col items-start gap-6">
             <span className="eyebrow">{t.home.badge}</span>
-            <h1 className="max-w-4xl text-5xl leading-[0.95] tracking-[-0.05em] sm:text-7xl lg:text-[104px]">
-              {t.home.heroTitle}
-            </h1>
-            <p className="max-w-xl text-lg leading-relaxed text-white/70 sm:text-xl">
+            <h1 className="max-w-3xl text-4xl leading-[1.1] sm:text-6xl">{t.home.heroTitle}</h1>
+            <p className="max-w-xl text-base leading-relaxed text-muted-foreground sm:text-lg">
               {t.home.heroSubtitle}
             </p>
             <div className="flex flex-wrap gap-3">
@@ -40,7 +38,7 @@ export default async function HomePage() {
       </section>
 
       {/* 课程目录 */}
-      <Container size="wide" id="courses" className="flex scroll-mt-20 flex-col gap-20 py-20">
+      <Container size="wide" id="courses" className="flex scroll-mt-20 flex-col gap-16 py-16">
         {enabledCategories().map((cat) => (
           <CategoryBlock key={cat.slug} category={cat} limitPerSub={3} locale={locale} />
         ))}

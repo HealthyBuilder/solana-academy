@@ -16,11 +16,11 @@ export const mdxComponents: MDXComponents = {
   ol: (props) => <ol className="my-4 list-decimal space-y-2 pl-6 text-foreground/90" {...props} />,
   li: (props) => <li className="leading-7" {...props} />,
   a: (props) => (
-    <a className="font-medium text-solana-green underline underline-offset-4 hover:text-white" {...props} />
+    <a className="font-medium text-brand underline underline-offset-4 hover:text-heading" {...props} />
   ),
   blockquote: (props) => (
     <blockquote
-      className="my-6 border-l-2 border-solana-green pl-4 text-muted-foreground"
+      className="my-6 border-l-2 border-brand pl-4 text-muted-foreground"
       {...props}
     />
   ),
@@ -29,7 +29,7 @@ export const mdxComponents: MDXComponents = {
   code: ({ className, ...props }) => (
     <code
       className={cn(
-        "rounded bg-white/8 px-1.5 py-0.5 font-mono text-[0.85em] text-white [pre_&]:bg-transparent [pre_&]:p-0 [pre_&]:text-[0.95em]",
+        "rounded bg-muted px-1.5 py-0.5 font-mono text-[0.85em] text-heading [pre_&]:bg-transparent [pre_&]:p-0 [pre_&]:text-[0.95em]",
         className
       )}
       {...props}
@@ -40,7 +40,7 @@ export const mdxComponents: MDXComponents = {
   pre: ({ className, ...props }) => (
     <pre
       className={cn(
-        "relative overflow-x-auto border border-border bg-[#0a0a0c] px-4 pb-4 pt-9 text-sm leading-relaxed",
+        "relative overflow-x-auto rounded-lg border border-border bg-muted px-4 pb-4 pt-9 text-sm leading-relaxed",
         className
       )}
       {...props}

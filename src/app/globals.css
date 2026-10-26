@@ -1,36 +1,61 @@
 @import "tailwindcss";
 
+/* dark: 变体跟随 <html class="dark">（由主题切换按钮 / cookie / 系统偏好决定） */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /*
  * Solana Academy 设计 token
- * 风格对齐 solana.com/developers：纯黑底、大号紧排无衬线标题、等宽小号大写 eyebrow、
- * 细线分隔的直角卡片、Solana 薄荷绿强调（主按钮为绿色胶囊）。
+ * 亮色：沿用原来的白底极简版式；字体与配色对齐 Solana Docs 亮色（近黑粗体标题、Solana 紫强调）。
+ * 暗色：对齐 Solana Docs 暗色（纯黑底、深紫卡片、青绿强调）。
  */
 :root {
-  color-scheme: dark;
+  color-scheme: light;
 
-  --background: #000000;
-  --foreground: #ebebeb;
-  --card: #050506;
-  --muted: #0b0b0d;
-  --muted-foreground: rgba(255, 255, 255, 0.6);
-  --border: rgba(236, 228, 253, 0.12);
-  --input: rgba(236, 228, 253, 0.16);
-  --ring: #14f195;
-  --primary: #14f195;
-  --primary-foreground: #000000;
-  --accent: rgba(255, 255, 255, 0.05); /* hover 底色 */
-  --accent-foreground: #ffffff;
+  --background: #ffffff;
+  --foreground: #2e2b37;
+  --heading: #171717;
+  --card: #ffffff;
+  --muted: #f5f5f5;
+  --muted-foreground: #6e7281;
+  --border: #e5e5e5;
+  --input: #e5e5e5;
+  --ring: #9945ff;
+  --primary: #171717;
+  --primary-foreground: #ffffff;
+  --accent: #f5f5f5; /* hover 底色 */
+  --accent-foreground: #171717;
+  --brand: #9945ff; /* 链接 / 强调色：Docs 亮色用 Solana 紫 */
 
   /* Solana 品牌色 */
   --solana-purple: #9945ff;
   --solana-green: #14f195;
 
-  --radius: 0.375rem;
+  --radius: 0.5rem;
+}
+
+.dark {
+  color-scheme: dark;
+
+  --background: #000000;
+  --foreground: #ebebeb;
+  --heading: #e6e6e6;
+  --card: #0c011d; /* Docs 暗色卡片：深紫 */
+  --muted: #0c011d;
+  --muted-foreground: #848895;
+  --border: #242424;
+  --input: #2e2e2e;
+  --ring: #00ffbd;
+  --primary: #fafafa;
+  --primary-foreground: #171717;
+  --accent: #150828;
+  --accent-foreground: #ffffff;
+  --brand: #00ffbd; /* Docs 暗色强调：青绿 */
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-heading: var(--heading);
   --color-card: var(--card);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
@@ -41,10 +66,11 @@
   --color-primary-foreground: var(--primary-foreground);
   --color-accent: var(--accent);
   --color-accent-foreground: var(--accent-foreground);
+  --color-brand: var(--brand);
   --color-solana-purple: var(--solana-purple);
   --color-solana-green: var(--solana-green);
 
-  /* 标题与正文用 Geist Sans；eyebrow / 标签 / 代码用 Geist Mono。均带 CJK 系统字体回退。 */
+  /* 标题与正文用 Geist Sans；标签 / 代码用 Geist Mono。均带 CJK 系统字体回退。 */
   --font-sans: var(--font-geist-sans), system-ui, -apple-system, "Segoe UI",
     "PingFang SC", "Hiragino Sans GB", "Microsoft YaHei", "微软雅黑", sans-serif;
   --font-mono: var(--font-geist-mono), ui-monospace, "SF Mono", Menlo,
@@ -66,22 +92,23 @@
     -webkit-font-smoothing: antialiased;
     text-rendering: optimizeLegibility;
   }
+  /* Docs 风格标题：粗体 + 收紧字距 */
   h1,
   h2,
   h3,
   h4,
   h5,
   h6 {
-    color: #ffffff;
-    font-weight: 500;
-    letter-spacing: -0.03em;
+    color: var(--heading);
+    font-weight: 700;
+    letter-spacing: -0.025em;
   }
   ::selection {
-    background: rgba(20, 241, 149, 0.3);
+    background: color-mix(in srgb, var(--brand) 25%, transparent);
   }
 }
 
-/* eyebrow：等宽小号大写 + 前置绿点（solana.com 的分区小标题） */
+/* 小号等宽大写标签，前置强调色圆点 */
 .eyebrow {
   display: inline-flex;
   align-items: center;
@@ -91,22 +118,35 @@
   line-height: 1;
   text-transform: uppercase;
   letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--muted-foreground);
 }
 .eyebrow::before {
   content: "";
   width: 0.3125rem;
   height: 0.3125rem;
   border-radius: 9999px;
-  background: var(--solana-green);
+  background: var(--brand);
 }
 
-/* 课程卡无封面时的占位：深色底 + 紫绿微光 */
-.gradient-accent {
-  background-color: #0b0b0f;
+/* 首页 hero 背景：亮色是原来的粉→青光斑，暗色是 Solana 紫光晕 */
+.hero-bg {
   background-image:
-    radial-gradient(60% 80% at 85% 20%, rgba(153, 69, 255, 0.35), transparent 70%),
-    radial-gradient(50% 70% at 10% 100%, rgba(20, 241, 149, 0.22), transparent 70%);
+    radial-gradient(38% 70% at 92% 0%, rgba(255, 212, 255, 0.75), transparent 70%),
+    radial-gradient(30% 60% at 100% 45%, rgba(170, 255, 255, 0.55), transparent 70%);
+}
+.dark .hero-bg {
+  background-image:
+    radial-gradient(45% 80% at 88% 0%, rgba(153, 69, 255, 0.28), transparent 70%),
+    radial-gradient(30% 60% at 100% 60%, rgba(153, 69, 255, 0.12), transparent 70%);
+}
+
+/* 课程卡无封面时的占位 */
+.gradient-accent {
+  background-image: linear-gradient(135deg, #ffd4ff, #aaffff);
+}
+.dark .gradient-accent {
+  background-color: #0c011d;
+  background-image: radial-gradient(60% 80% at 85% 20%, rgba(153, 69, 255, 0.35), transparent 70%);
 }
 
 /* Solana 品牌渐变（紫 → 绿） */
@@ -122,9 +162,14 @@
   color: transparent;
 }
 
-/* Hero 顶部的深绿光晕（solana.com/developers 同款） */
-.hero-glow {
-  background-image: radial-gradient(70% 90% at 30% 0%, rgba(20, 241, 149, 0.14), transparent 70%);
+/* Shiki 双主题：span 上带 --shiki-light / --shiki-dark，按当前主题取色 */
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  color: var(--shiki-light);
+}
+.dark code[data-theme*=" "],
+.dark code[data-theme*=" "] span {
+  color: var(--shiki-dark);
 }
 
 /* 代码块语言标签（rehype-pretty-code 注入的 data-language） */

@@ -8,6 +8,7 @@ import { Footer } from "@/components/layout/footer";
 import { ProgressProvider } from "@/hooks/use-progress";
 import { LocaleProvider } from "@/components/i18n/locale-provider";
 import { getLocale } from "@/lib/locale";
+import { getTheme, themeInitScript } from "@/lib/theme";
 
 export const metadata: Metadata = {
   title: {
@@ -23,11 +24,16 @@ export default async function RootLayout({
   children: React.ReactNode;
 }>) {
   const locale = await getLocale();
+  const theme = await getTheme();
   return (
     <html
       lang={locale === "en" ? "en" : "zh-CN"}
-      className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased`}
+      className={`${GeistSans.variable} ${GeistMono.variable} h-full antialiased${theme === "dark" ? " dark" : ""}`}
+      suppressHydrationWarning
     >
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeInitScript }} />
+      </head>
       <body className="flex min-h-full flex-col bg-background text-foreground">
         <LocaleProvider initialLocale={locale}>
           <ProgressProvider>
