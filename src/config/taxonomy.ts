@@ -35,7 +35,7 @@ export const taxonomy: Category[] = [
       { slug: "blockchain-basics", title: { zh: "区块链技术基础", en: "Blockchain Fundamentals" } },
       { slug: "solana-app-dev", title: { zh: "Solana 应用开发", en: "Solana App Development" } },
       { slug: "solana-enterprise", title: { zh: "Solana 企业实践", en: "Solana for Enterprise" }, enabled: false },
-      { slug: "ecosystem-share", title: { zh: "Solana 生态分享", en: "Solana Ecosystem" } },
+      { slug: "ecosystem-share", title: { zh: "Solana 生态分享", en: "Workshops from Ecosystem" } },
     ],
   },
   {
