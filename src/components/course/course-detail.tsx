@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { ArrowRight, Check, Clock, PlayCircle } from "lucide-react";
 import { courseDescription, courseTitle, type Course } from "@/lib/content-types";
+import { tagLabel } from "@/config/tags";
 import { useProgress } from "@/hooks/use-progress";
 import { DifficultyBadge } from "./difficulty-badge";
 import { Badge } from "@/components/ui/badge";
@@ -51,7 +52,7 @@ export function CourseDetail({ course }: { course: Course }) {
             </h1>
             <p className="max-w-2xl leading-relaxed text-muted-foreground">{courseDescription(course, locale)}</p>
             <div className="flex flex-wrap gap-1.5">
-              {course.tags.map((tag) => (
+              {[...new Set(course.tags.map((tag) => tagLabel(tag, locale)))].map((tag) => (
                 <Badge key={tag} variant="outline">
                   {tag}
                 </Badge>

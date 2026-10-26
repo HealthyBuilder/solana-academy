@@ -2,7 +2,8 @@
 
 import Link from "next/link";
 import { ArrowRight, BookOpen, Clock } from "lucide-react";
-import { courseDescription, courseTitle, type Course } from "@/lib/content-types";
+import { courseCoverUrl, courseDescription, courseTitle, type Course } from "@/lib/content-types";
+import { tagLabel } from "@/config/tags";
 import { useProgress } from "@/hooks/use-progress";
 import { useLocale } from "@/components/i18n/locale-provider";
 import { DifficultyBadge } from "./difficulty-badge";
@@ -17,6 +18,8 @@ export function CourseCard({ course }: { course: Course }) {
   const done = hydrated ? completedCount(course.slug) : 0;
   const pct = total ? Math.round((done / total) * 100) : 0;
   const comingSoon = course.status === "coming-soon";
+  const cover = courseCoverUrl(course);
+  const tags = [...new Set(course.tags.map((tag) => tagLabel(tag, locale)))].slice(0, 3);
   const hours = course.estimatedHours
     ? locale === "zh"
       ? `约 ${course.estimatedHours} 小时`
@@ -30,7 +33,15 @@ export function CourseCard({ course }: { course: Course }) {
         comingSoon ? "opacity-70" : "hover:-translate-y-0.5 hover:border-foreground/20"
       )}
     >
-      <div className="relative aspect-[16/9] gradient-accent">
+      <div className="relative aspect-[16/9] overflow-hidden gradient-accent">
+        {cover && (
+          <img
+            src={cover}
+            alt=""
+            loading="lazy"
+            className="absolute inset-0 size-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+          />
+        )}
         <div className="absolute left-3 top-3">
           <DifficultyBadge level={course.difficulty} />
         </div>
@@ -41,12 +52,14 @@ export function CourseCard({ course }: { course: Course }) {
             </Badge>
           </div>
         )}
-        <BookOpen className="absolute bottom-3 right-3 size-8 text-foreground/15" strokeWidth={1.5} />
+        {!cover && (
+          <BookOpen className="absolute bottom-3 right-3 size-8 text-foreground/15" strokeWidth={1.5} />
+        )}
       </div>
 
       <div className="flex flex-1 flex-col gap-3 p-5">
         <div className="flex flex-wrap gap-1.5">
-          {course.tags.slice(0, 3).map((tag) => (
+          {tags.map((tag) => (
             <Badge key={tag} variant="outline">
               {tag}
             </Badge>

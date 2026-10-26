@@ -28,6 +28,8 @@ export type CourseMeta = {
   /** 英文标题 / 简介（可选，缺省时回退中文） */
   titleEn?: string;
   descriptionEn?: string;
+  /** 课程卡封面图（如 /covers/xxx.jpg）；缺省时用课程视频的 YouTube 封面 */
+  coverImage?: string;
   /** taxonomy 顶级分类 slug */
   category: string;
   /** taxonomy 子分类 slug */
@@ -46,6 +48,14 @@ export type Course = CourseMeta & {
 /** 按语言取课程标题，英文缺省时回退中文。 */
 export function courseTitle(c: CourseMeta, locale: "zh" | "en"): string {
   return locale === "en" && c.titleEn ? c.titleEn : c.title;
+}
+
+/** 课程卡封面：优先 coverImage，否则取第一个 YouTube 课节的视频封面。 */
+export function courseCoverUrl(c: Course): string | undefined {
+  if (c.coverImage) return c.coverImage;
+  const id = c.lessons.find((l) => l.videoId)?.videoId;
+  // hqdefault 是 4:3 带黑边，object-cover 裁成 16:9 正好去掉黑边
+  return id ? `https://i.ytimg.com/vi/${id}/hqdefault.jpg` : undefined;
 }
 
 /** 按语言取课程简介，英文缺省时回退中文。 */
