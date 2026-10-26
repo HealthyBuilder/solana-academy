@@ -14,6 +14,10 @@ export type LessonMeta = {
   videoId?: string;
   /** Bilibili 视频 BV 号（如 BV1HfquBsE1L） */
   bilibiliId?: string;
+  /** 外链视频：无法内嵌时跳转到该 URL（如登链社区） */
+  externalUrl?: string;
+  /** 外链按钮文案，默认「前往观看」 */
+  externalLabel?: string;
   description?: string;
 };
 

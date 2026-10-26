@@ -80,11 +80,13 @@ export default async function LessonPage({ params }: Params) {
             <p className="mt-2 leading-relaxed text-muted-foreground">{meta.description}</p>
           )}
 
-          {(meta.videoId || meta.bilibiliId) && (
+          {(meta.videoId || meta.bilibiliId || meta.externalUrl) && (
             <div className="mt-6">
               <VideoPlayer
                 youtubeId={meta.videoId}
                 bilibiliId={meta.bilibiliId}
+                externalUrl={meta.externalUrl}
+                externalLabel={meta.externalLabel}
                 title={meta.title}
               />
             </div>

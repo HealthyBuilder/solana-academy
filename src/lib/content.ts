@@ -36,6 +36,8 @@ function readLessonMetas(courseSlug: string): LessonMeta[] {
       duration: data.duration,
       videoId: data.videoId,
       bilibiliId: data.bilibiliId,
+      externalUrl: data.externalUrl,
+      externalLabel: data.externalLabel,
       description: data.description,
     } satisfies LessonMeta;
   });
@@ -83,6 +85,8 @@ export function getLesson(
       duration: data.duration,
       videoId: data.videoId,
       bilibiliId: data.bilibiliId,
+      externalUrl: data.externalUrl,
+      externalLabel: data.externalLabel,
       description: data.description,
     },
     content,
