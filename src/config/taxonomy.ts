@@ -42,7 +42,7 @@ export const taxonomy: Category[] = [
   },
   {
     slug: "skills",
-    title: { zh: "Skills hub", en: "Skills Hub" },
+    title: { zh: "Startup hub", en: "Startup Hub" },
     description: {
       zh: "可迁移的核心技能与领域知识模块。",
       en: "Transferable core skills and domain knowledge.",
