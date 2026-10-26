@@ -3,9 +3,9 @@ import remarkGfm from "remark-gfm";
 import rehypePrettyCode, { type Options as PrettyCodeOptions } from "rehype-pretty-code";
 import { mdxComponents } from "./mdx-components";
 
-// Shiki 语法高亮：浅色主题，背景沿用站点的 bg-muted。
+// Shiki 语法高亮：深色主题，背景沿用站点的 bg-muted。
 const prettyCodeOptions: PrettyCodeOptions = {
-  theme: "github-light",
+  theme: "github-dark-default",
   keepBackground: false,
 };
 

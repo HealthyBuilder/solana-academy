@@ -29,11 +29,11 @@ export function CourseCard({ course }: { course: Course }) {
   const card = (
     <div
       className={cn(
-        "group flex h-full flex-col overflow-hidden rounded-lg border border-border bg-card transition-all",
-        comingSoon ? "opacity-70" : "hover:-translate-y-0.5 hover:border-foreground/20"
+        "group flex h-full flex-col overflow-hidden border border-border bg-card transition-colors",
+        comingSoon ? "opacity-70" : "hover:border-white/30 hover:bg-white/[0.02]"
       )}
     >
-      <div className="relative aspect-[16/9] overflow-hidden gradient-accent">
+      <div className="relative aspect-[16/9] overflow-hidden border-b border-border gradient-accent">
         {cover && (
           <img
             src={cover}
@@ -47,13 +47,13 @@ export function CourseCard({ course }: { course: Course }) {
         </div>
         {comingSoon && (
           <div className="absolute right-3 top-3">
-            <Badge variant="secondary" className="bg-white/70 backdrop-blur">
+            <Badge variant="secondary" className="bg-black/70 backdrop-blur">
               {t.common.comingSoon}
             </Badge>
           </div>
         )}
         {!cover && (
-          <BookOpen className="absolute bottom-3 right-3 size-8 text-foreground/15" strokeWidth={1.5} />
+          <BookOpen className="absolute bottom-3 right-3 size-8 text-white/20" strokeWidth={1.5} />
         )}
       </div>
 
@@ -65,10 +65,10 @@ export function CourseCard({ course }: { course: Course }) {
             </Badge>
           ))}
         </div>
-        <h3 className="font-mono text-base font-semibold leading-snug tracking-tight">
+        <h3 className="text-lg leading-snug tracking-[-0.025em]">
           {courseTitle(course, locale)}
         </h3>
-        <p className="line-clamp-2 text-sm text-muted-foreground">{courseDescription(course, locale)}</p>
+        <p className="line-clamp-2 text-sm leading-relaxed text-white/60">{courseDescription(course, locale)}</p>
 
         <div className="mt-auto flex flex-col gap-3 pt-2">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
@@ -95,7 +95,7 @@ export function CourseCard({ course }: { course: Course }) {
           )}
 
           {!comingSoon && (
-            <span className="inline-flex items-center gap-1 font-mono text-sm text-foreground">
+            <span className="inline-flex items-center gap-1.5 text-sm font-semibold text-white transition-colors group-hover:text-solana-green">
               {done > 0 ? t.course.continueLearning : t.course.startLearning}
               <ArrowRight className="size-4 transition-transform group-hover:translate-x-0.5" />
             </span>
@@ -110,7 +110,7 @@ export function CourseCard({ course }: { course: Course }) {
   return (
     <Link
       href={`/course/${course.slug}`}
-      className="block rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
+      className="block focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
     >
       {card}
     </Link>

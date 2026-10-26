@@ -88,7 +88,7 @@ export function CourseDetail({ course }: { course: Course }) {
       </section>
 
       <Container className="py-10">
-        <h2 className="mb-4 font-mono text-sm uppercase tracking-[0.2em] text-muted-foreground">
+        <h2 className="eyebrow mb-5">
           {t.course.lessons}
         </h2>
         {total > 0 ? (

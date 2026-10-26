@@ -18,7 +18,7 @@ export function Header() {
     <button
       type="button"
       onClick={() => setLocale(locale === "zh" ? "en" : "zh")}
-      className="inline-flex items-center gap-1.5 rounded-md px-2.5 py-2 font-mono text-xs transition-colors hover:bg-muted"
+      className="inline-flex items-center gap-1.5 rounded-md border border-white/15 px-2.5 py-1.5 text-xs font-medium text-white/80 transition-colors hover:border-white/30 hover:text-white"
       aria-label={t.nav.language}
       title={t.nav.language}
     >
@@ -28,7 +28,7 @@ export function Header() {
   );
 
   return (
-    <header className="sticky top-0 z-50 border-b border-border bg-background/80 backdrop-blur">
+    <header className="sticky top-0 z-50 border-b border-[#242424] bg-black/80 backdrop-blur-md">
       <Container size="wide" className="flex h-16 items-center justify-between gap-4">
         <Link href="/" className="flex shrink-0 items-center" aria-label="Solana Academy">
           <Logo />
@@ -44,7 +44,7 @@ export function Header() {
                   key={cat.slug}
                   title={t.nav.comingSoon}
                   aria-disabled="true"
-                  className="flex cursor-not-allowed items-center gap-1 rounded-md px-3 py-2 font-mono text-sm text-muted-foreground/40"
+                  className="flex cursor-not-allowed items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-white/25"
                 >
                   {cat.title[locale]}
                 </span>
@@ -54,18 +54,18 @@ export function Header() {
               <div key={cat.slug} className="group relative">
                 <Link
                   href={`/category/${cat.slug}`}
-                  className="flex items-center gap-1 rounded-md px-3 py-2 font-mono text-sm transition-colors hover:bg-muted"
+                  className="flex items-center gap-1 rounded-md px-3 py-2 text-sm font-medium text-white transition-colors hover:text-white/80"
                 >
                   {cat.title[locale]}
-                  <ChevronDown className="size-3.5 text-muted-foreground transition-transform group-hover:rotate-180" />
+                  <ChevronDown className="size-3.5 text-white/50 transition-transform group-hover:rotate-180" />
                 </Link>
                 <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
-                  <div className="w-64 rounded-lg border border-border bg-card p-2 shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
+                  <div className="w-64 rounded-md border border-border bg-[#0a0a0c] p-2 shadow-[0_12px_40px_rgb(0,0,0,0.6)]">
                     {cat.subcategories.filter((sub) => sub.enabled !== false).map((sub) => (
                       <Link
                         key={sub.slug}
                         href={`/category/${cat.slug}#${sub.slug}`}
-                        className="block rounded-md px-3 py-2 font-mono text-sm transition-colors hover:bg-accent"
+                        className="block rounded-sm px-3 py-2 text-sm text-white/80 transition-colors hover:bg-white/5 hover:text-white"
                       >
                         {sub.title[locale]}
                       </Link>

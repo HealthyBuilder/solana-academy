@@ -16,11 +16,14 @@ export async function Footer() {
       : "Learn Solana systematically — from fundamentals and app development to ecosystem and careers.";
 
   return (
-    <footer className="mt-auto border-t border-border">
-      <Container className="grid grid-cols-2 gap-8 py-12 md:grid-cols-6">
+    <footer className="mt-auto border-t border-[#242424]">
+      <Container className="grid grid-cols-2 gap-8 py-14 md:grid-cols-6">
         <div className="col-span-2">
           <Logo />
-          <p className="mt-3 max-w-xs text-sm text-muted-foreground">{tagline}</p>
+          <p className="mt-3 inline-flex items-center gap-1.5 font-mono text-[11px] uppercase tracking-[0.12em] text-solana-green">
+            Built by Solana Foundation
+          </p>
+          <p className="mt-4 max-w-xs text-sm leading-relaxed text-white/60">{tagline}</p>
         </div>
 
         {taxonomy.map((cat) => {
@@ -29,8 +32,8 @@ export async function Footer() {
             <div key={cat.slug}>
               <h4
                 className={cn(
-                  "flex items-center gap-1.5 font-mono text-sm font-semibold",
-                  disabled && "text-muted-foreground/40"
+                  "flex items-center gap-1.5 text-sm font-medium text-white",
+                  disabled && "text-white/25"
                 )}
               >
                 {cat.title[locale]}
@@ -46,7 +49,7 @@ export async function Footer() {
                     <li key={sub.slug}>
                       <Link
                         href={`/category/${cat.slug}#${sub.slug}`}
-                        className="text-sm text-muted-foreground transition-colors hover:text-foreground"
+                        className="text-sm text-white/60 transition-colors hover:text-white"
                       >
                         {sub.title[locale]}
                       </Link>
@@ -59,12 +62,12 @@ export async function Footer() {
         })}
       </Container>
 
-      <div className="border-t border-border">
-        <Container className="flex flex-col items-center justify-between gap-2 py-6 text-xs text-muted-foreground sm:flex-row">
+      <div className="border-t border-[#242424]">
+        <Container className="flex flex-col items-center justify-between gap-2 py-6 text-xs text-white/50 sm:flex-row">
           <p>
             © 2026 {site.name} · {locale === "zh" ? "学习平台" : "Learning platform"}
           </p>
-          <p className="font-mono">Built for Solana developers</p>
+          <p className="font-mono uppercase tracking-[0.12em]">Built by Solana Foundation</p>
         </Container>
       </div>
     </footer>
