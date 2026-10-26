@@ -12,8 +12,8 @@ export async function Footer() {
   const t = dictionaries[locale];
   const tagline =
     locale === "zh"
-      ? "系统化学习 Solana：从区块链技术基础、应用开发，到企业实践与职业发展。"
-      : "Learn Solana systematically — from fundamentals to app development, enterprise practice and careers.";
+      ? "系统化学习 Solana：从区块链技术基础、应用开发，到生态分享与职业发展。"
+      : "Learn Solana systematically — from fundamentals and app development to ecosystem and careers.";
 
   return (
     <footer className="mt-auto border-t border-border">
@@ -42,7 +42,7 @@ export async function Footer() {
               </h4>
               {!disabled && (
                 <ul className="mt-3 flex flex-col gap-2">
-                  {cat.subcategories.map((sub) => (
+                  {cat.subcategories.filter((sub) => sub.enabled !== false).map((sub) => (
                     <li key={sub.slug}>
                       <Link
                         href={`/category/${cat.slug}#${sub.slug}`}

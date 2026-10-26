@@ -61,7 +61,7 @@ export function Header() {
                 </Link>
                 <div className="invisible absolute left-0 top-full pt-2 opacity-0 transition-all duration-150 group-hover:visible group-hover:opacity-100 group-focus-within:visible group-focus-within:opacity-100">
                   <div className="w-64 rounded-lg border border-border bg-card p-2 shadow-[0_8px_30px_rgb(0,0,0,0.06)]">
-                    {cat.subcategories.map((sub) => (
+                    {cat.subcategories.filter((sub) => sub.enabled !== false).map((sub) => (
                       <Link
                         key={sub.slug}
                         href={`/category/${cat.slug}#${sub.slug}`}
@@ -129,7 +129,7 @@ export function Header() {
                     {cat.title[locale]}
                   </Link>
                   <div className="mt-2 flex flex-col gap-1 border-l border-border pl-3">
-                    {cat.subcategories.map((sub) => (
+                    {cat.subcategories.filter((sub) => sub.enabled !== false).map((sub) => (
                       <Link
                         key={sub.slug}
                         href={`/category/${cat.slug}#${sub.slug}`}
