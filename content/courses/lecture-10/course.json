@@ -1,1 +1,1 @@
-{ "title": "第十讲 · 知识点总结", "description": "课程知识点总结，以及求职专场：项目介绍与招聘会。", "category": "tech", "subcategory": "blockchain-basics", "difficulty": "beginner", "tags": ["总结", "求职"], "estimatedHours": 1 }
+{ "title": "第十讲 · Solana 虚拟机（SVM）与内存执行机制", "description": "深入 Solana 虚拟机：sBPF 字节码、虚拟内存布局、栈与堆、计算预算，以及 Sealevel 并行执行。", "category": "tech", "subcategory": "blockchain-basics", "difficulty": "advanced", "tags": ["SVM", "虚拟机", "执行机制", "sBPF"], "estimatedHours": 2 }
