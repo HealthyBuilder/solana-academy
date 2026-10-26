@@ -31,6 +31,7 @@ export function CategoryBlock({
       <div className="flex flex-col gap-10">
         {category.subcategories.map((sub) => {
           const courses = getCoursesBySubcategory(sub.slug);
+          if (courses.length === 0) return null; // 空子分类不展示
           const shown = limitPerSub ? courses.slice(0, limitPerSub) : courses;
           const hasMore = limitPerSub != null && courses.length > limitPerSub;
           return (
