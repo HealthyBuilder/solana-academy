@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Check, Clock, PlayCircle } from "lucide-react";
-import type { Course } from "@/lib/content-types";
+import { courseDescription, courseTitle, type Course } from "@/lib/content-types";
 import { useProgress } from "@/hooks/use-progress";
 import { DifficultyBadge } from "./difficulty-badge";
 import { Badge } from "@/components/ui/badge";
@@ -38,7 +38,7 @@ export function CourseDetail({ course }: { course: Course }) {
               {getCategory(course.category)?.title[locale]}
             </Link>
             <span>/</span>
-            <span className="text-foreground">{course.title}</span>
+            <span className="text-foreground">{courseTitle(course, locale)}</span>
           </nav>
 
           <div className="flex flex-col gap-4">
@@ -47,9 +47,9 @@ export function CourseDetail({ course }: { course: Course }) {
               {subTitle && <Badge variant="secondary">{subTitle}</Badge>}
             </div>
             <h1 className="max-w-3xl text-3xl font-semibold tracking-tight sm:text-4xl">
-              {course.title}
+              {courseTitle(course, locale)}
             </h1>
-            <p className="max-w-2xl leading-relaxed text-muted-foreground">{course.description}</p>
+            <p className="max-w-2xl leading-relaxed text-muted-foreground">{courseDescription(course, locale)}</p>
             <div className="flex flex-wrap gap-1.5">
               {course.tags.map((tag) => (
                 <Badge key={tag} variant="outline">

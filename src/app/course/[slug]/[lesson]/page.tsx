@@ -2,6 +2,7 @@ import { notFound } from "next/navigation";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getAllCourses, getCourse, getLesson } from "@/lib/content";
+import { courseTitle } from "@/lib/content-types";
 import { Container } from "@/components/ui/container";
 import { LessonSidebar } from "@/components/lesson/lesson-sidebar";
 import { LessonNav } from "@/components/lesson/lesson-nav";
@@ -53,7 +54,7 @@ export default async function LessonPage({ params }: Params) {
               href={`/course/${course.slug}`}
               className="mb-2 block px-3 font-mono text-sm font-semibold hover:underline"
             >
-              {course.title}
+              {courseTitle(course, locale)}
             </Link>
             <LessonSidebar course={course} currentSlug={lesson} />
           </div>
@@ -71,7 +72,7 @@ export default async function LessonPage({ params }: Params) {
             </Link>
             <span>/</span>
             <Link href={`/course/${course.slug}`} className="hover:text-foreground">
-              {course.title}
+              {courseTitle(course, locale)}
             </Link>
           </nav>
 

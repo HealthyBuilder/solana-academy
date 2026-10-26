@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, BookOpen, Clock } from "lucide-react";
-import type { Course } from "@/lib/content-types";
+import { courseDescription, courseTitle, type Course } from "@/lib/content-types";
 import { useProgress } from "@/hooks/use-progress";
 import { useLocale } from "@/components/i18n/locale-provider";
 import { DifficultyBadge } from "./difficulty-badge";
@@ -53,9 +53,9 @@ export function CourseCard({ course }: { course: Course }) {
           ))}
         </div>
         <h3 className="font-mono text-base font-semibold leading-snug tracking-tight">
-          {course.title}
+          {courseTitle(course, locale)}
         </h3>
-        <p className="line-clamp-2 text-sm text-muted-foreground">{course.description}</p>
+        <p className="line-clamp-2 text-sm text-muted-foreground">{courseDescription(course, locale)}</p>
 
         <div className="mt-auto flex flex-col gap-3 pt-2">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">

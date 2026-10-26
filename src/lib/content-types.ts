@@ -25,6 +25,9 @@ export type LessonMeta = {
 export type CourseMeta = {
   title: string;
   description: string;
+  /** 英文标题 / 简介（可选，缺省时回退中文） */
+  titleEn?: string;
+  descriptionEn?: string;
   /** taxonomy 顶级分类 slug */
   category: string;
   /** taxonomy 子分类 slug */
@@ -39,3 +42,13 @@ export type Course = CourseMeta & {
   status: CourseStatus;
   lessons: LessonMeta[];
 };
+
+/** 按语言取课程标题，英文缺省时回退中文。 */
+export function courseTitle(c: CourseMeta, locale: "zh" | "en"): string {
+  return locale === "en" && c.titleEn ? c.titleEn : c.title;
+}
+
+/** 按语言取课程简介，英文缺省时回退中文。 */
+export function courseDescription(c: CourseMeta, locale: "zh" | "en"): string {
+  return locale === "en" && c.descriptionEn ? c.descriptionEn : c.description;
+}
