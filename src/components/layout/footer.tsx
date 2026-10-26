@@ -12,8 +12,8 @@ export async function Footer() {
   const t = dictionaries[locale];
   const tagline =
     locale === "zh"
-      ? "系统化学习 Solana：从区块链技术基础、应用开发，到生态分享与职业发展。"
-      : "Learn Solana systematically — from fundamentals and app development to ecosystem and careers.";
+      ? "系统化学习 Solana：从区块链技术基础、应用开发、企业实践，到生态分享与职业发展。"
+      : "Learn Solana systematically — from fundamentals and app development to enterprise practice, ecosystem and careers.";
 
   return (
     <footer className="mt-auto border-t border-border">

@@ -16,7 +16,7 @@ const zh = {
     badge: "Solana Academy",
     heroTitle: "系统化学习 Solana 技术",
     heroSubtitle:
-      "从区块链技术基础到 Solana 应用开发与生态实战 —— 一条清晰的技术学习路径，配套视频与动手内容。",
+      "从区块链技术基础到 Solana 应用开发、企业实践与生态实战 —— 一条清晰的技术学习路径，配套视频与动手内容。",
     ctaStart: "开始学习",
     ctaExplore: "浏览全部课程",
     sectionCourses: "课程目录",
@@ -67,7 +67,7 @@ const en: typeof zh = {
     badge: "Solana Academy",
     heroTitle: "Learn Solana Development",
     heroSubtitle:
-      "From blockchain fundamentals to Solana app development and ecosystem hands-on — one clear technical path, with videos and exercises.",
+      "From blockchain fundamentals to Solana app development, enterprise practice and ecosystem hands-on — one clear technical path, with videos and exercises.",
     ctaStart: "Start learning",
     ctaExplore: "Browse all courses",
     sectionCourses: "Courses",

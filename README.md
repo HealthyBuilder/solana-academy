@@ -1,70 +1,96 @@
+**English** | [简体中文](./README.zh-CN.md)
+
 # Solana Academy
 
-系统化学习 Solana 的教学平台：课程目录、图文 + 视频课节、代码高亮、学习进度，界面支持中 / 英双语。
+A learning platform for building on Solana: structured courses, video lessons with written tutorials, syntax-highlighted code, and local progress tracking. Bilingual interface (Chinese / English) with light and dark themes.
 
-## 技术栈
+Built by Solana Foundation.
 
-- **Next.js 16**（App Router）· **React 19** · **TypeScript**
-- **Tailwind CSS 4**
-- **MDX**（`next-mdx-remote/rsc`）渲染课程内容，`remark-gfm` 支持表格
-- **Shiki**（`rehype-pretty-code`）代码语法高亮
-- **Geist** 字体（`geist` 本地包，无需联网拉取）
-- 视频：YouTube（静音自动播放）+ Bilibili
+## Content
 
-## 本地开发
+All courses live under **Technical Courses**, grouped into four tracks:
+
+| Track | Source | What's inside |
+|---|---|---|
+| Blockchain Fundamentals | Bootcamp Season 1 | 11 lectures: blockchain basics, accounts, native programs, Anchor, SPL / Token-2022, Pinocchio, testing, program security, the SVM |
+| Solana App Development | Bootcamp Season 2 | 16 hands-on parts: environment setup, Hello World, voting, escrow, private transfers, stablecoin + swap, prediction market, x402, RWA, Solana Mobile, production deployment |
+| Solana for Enterprise | Bootcamp Season 3 | Institutional practice sessions (in progress, still being updated) |
+| Workshops from Ecosystem | Seasons 1 and 2 | 15 workshops from ecosystem teams: trading bots, internet capital markets, AI vibe coding, arbitrage, session keys, Titan, 0x, OKX DEX and more |
+
+## Features
+
+- **Video lessons** from YouTube (muted autoplay with an unmute button), Bilibili or Google Drive. Videos that can't be embedded show a card that opens the source in a new tab.
+- **Written tutorials** in MDX, with GitHub-flavored tables and Shiki syntax highlighting that follows the current theme.
+- **Bilingual interface**: Chinese / English toggle in the header. Course titles, descriptions and tags are translated; lesson bodies are currently in Chinese.
+- **Light and dark themes**, matching the look of the Solana Docs. The choice is remembered; first-time visitors follow their system setting.
+- **Progress tracking** in `localStorage`, with no login required.
+
+## Tech stack
+
+- Next.js 16 (App Router), React 19, TypeScript
+- Tailwind CSS 4 with CSS-variable design tokens for both themes
+- MDX via `next-mdx-remote`, `remark-gfm`, `rehype-pretty-code` / Shiki
+- Geist Sans / Geist Mono (bundled locally via the `geist` package)
+
+## Getting started
 
 ```bash
 pnpm install
-pnpm dev      # 开发服务器 http://localhost:3000
-pnpm build    # 生产构建
-pnpm start    # 运行生产构建
+pnpm dev      # http://localhost:3000
+pnpm build    # production build
+pnpm start    # serve the production build
 ```
 
-## 目录结构
+## Project structure
 
 ```
-content/courses/<课程 slug>/     课程内容（Markdown/MDX）
-  course.json                    课程元数据
-  NN-*.mdx                       各课节（frontmatter + 正文）
+content/courses/<slug>/      one folder per course
+  course.json                course metadata
+  NN-*.mdx                   lessons, ordered by the NN- prefix
+public/covers/               course card covers
+public/s2/                   images used by Season 2 lessons
 src/
-  app/                           路由：首页 / 分类 / 课程 / 课节
-  components/                    ui · layout · course · lesson · mdx · i18n
-  config/                        taxonomy(分类) · strings(界面文案) · site
-  lib/                           content(内容层) · locale(语言) · utils
+  app/                       routes: home, category, course, lesson
+  components/                ui, layout, course, lesson, mdx, i18n
+  config/                    taxonomy, interface strings, tag translations, site
+  lib/                       content loading, locale, theme
 ```
 
-## 内容模型
+## Adding a course
 
-**课程** `content/courses/<slug>/course.json`：
+1. Create `content/courses/<slug>/course.json`:
 
-```json
-{
-  "title": "第一讲 · 区块链基础",
-  "description": "...",
-  "category": "tech",
-  "subcategory": "blockchain-basics",
-  "difficulty": "beginner",
-  "tags": ["区块链基础", "共识"],
-  "estimatedHours": 3
-}
-```
+   ```json
+   {
+     "title": "第一讲 · 区块链基础",
+     "titleEn": "Lecture 1 · Blockchain Fundamentals",
+     "description": "…",
+     "descriptionEn": "…",
+     "category": "tech",
+     "subcategory": "blockchain-basics",
+     "difficulty": "beginner",
+     "tags": ["区块链基础", "共识"],
+     "estimatedHours": 3,
+     "coverImage": "/covers/<slug>.jpg"
+   }
+   ```
 
-**课节** `content/courses/<slug>/NN-*.mdx`：frontmatter 支持
+   `titleEn`, `descriptionEn` and `coverImage` are optional. Without a cover image, the card uses the thumbnail of the course's first YouTube video.
 
-- `title` · `duration`（分钟）· `description`
-- `videoId`（YouTube）或 `bilibiliId`（B 站 `BV...`）——填了就在课节顶部嵌入视频
-- 正文为 Markdown/MDX，代码块自动语法高亮（可区分 Rust / TypeScript 等）
+2. Add lessons as `NN-<name>.mdx`. Supported frontmatter:
 
-新增课程：在 `content/courses/` 下建目录，放 `course.json` 与若干 `NN-*.mdx`，平台会自动收录并按文件名 `NN-` 前缀排序。
+   | Field | Meaning |
+   |---|---|
+   | `title`, `description`, `duration` | lesson title, summary, length in minutes |
+   | `videoId` | YouTube video ID |
+   | `bilibiliId` | Bilibili BV ID |
+   | `driveId` | Google Drive file ID (the file must be shared as "anyone with the link") |
+   | `externalUrl`, `externalLabel` | link-out card for videos that can't be embedded |
 
-## 分类与导航
+New courses are picked up automatically. Courses within a track are ordered by folder name.
 
-分类体系集中在 `src/config/taxonomy.ts`（单一数据源，标题双语）。`enabled: false` 的板块在导航中置灰、首页不展示。
+## Configuration
 
-## 国际化
-
-界面支持中文 / English，通过页头的语言切换按钮（基于 cookie，服务端与客户端一致）。界面文案集中在 `src/config/strings.ts`，分类名在 `taxonomy.ts`。课程正文目前为中文。
-
-## 学习进度
-
-前端使用 `localStorage` 记录已完成课节（无需登录），刷新后保留。
+- **Tracks** are defined in `src/config/taxonomy.ts`. Set `enabled: false` on a track to hide it, or `ongoing: true` to show an "In progress" badge.
+- **Interface text** lives in `src/config/strings.ts`; tag translations live in `src/config/tags.ts`.
+- **Theme colors** are CSS variables in `src/app/globals.css` (`:root` for light, `.dark` for dark).
